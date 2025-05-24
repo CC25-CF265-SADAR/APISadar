@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { registerHandler, loginHandler } = require("../handlers/handlerUser");
+const { registerHandler, loginHandler, resetPasswordHandler, forgotPasswordHandler } = require("../handlers/handlerUser");
 
 module.exports = [
   {
@@ -28,5 +28,32 @@ module.exports = [
       },
     },
     handler: loginHandler,
+  },
+  {
+    method: "POST",
+    path: "/forgot-password",
+    options: {
+      validate: {
+        payload: Joi.object({
+          email: Joi.string().email().required(),
+        }),
+      },
+      cors: true,
+    },
+    handler: forgotPasswordHandler,
+  },
+  {
+    method: "POST",
+    path: "/reset-password",
+    options: {
+      validate: {
+        payload: Joi.object({
+          token: Joi.string().required(),
+          newPassword: Joi.string().min(6).required(),
+        }),
+      },
+      cors: true,
+    },
+    handler: resetPasswordHandler,
   },
 ];
