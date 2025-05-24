@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const topicSchema = new mongoose.Schema({
   id: String,
   title: String,
-  type: String, // 'text' | 'video'
   contentId: String,
   checkpoint: {
     type: Boolean,

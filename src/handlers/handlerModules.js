@@ -3,6 +3,26 @@ const ModuleDetail = require("../models/moduleDetails");
 const Content = require("../models/contentData");
 
 // ========== MODULE ==========
+const addModule = async (request, h) => {
+  const { id, title, description, thumbnail, totalTopics } = request.payload;
+
+  const existing = await Module.findOne({ id });
+  if (existing) {
+    return h.response({ message: "Modul sudah ada" }).code(400);
+  }
+
+  const newModule = new Module({
+    id,
+    title,
+    description,
+    thumbnail,
+    totalTopics
+  });
+
+  await newModule.save();
+  return h.response({ message: "Modul berhasil ditambahkan" }).code(201);
+};
+
 const getAllModules = async (request, h) => {
   const modules = await Module.find();
   return h.response(modules).code(200);
@@ -69,5 +89,6 @@ module.exports = {
   getModuleDetailById,
   createModuleDetail,
   getContentById, 
-  addContent
+  addContent, 
+  addModule,
 };

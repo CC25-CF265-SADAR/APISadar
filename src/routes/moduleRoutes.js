@@ -4,11 +4,25 @@ const {
   getModuleDetailById,
   createModuleDetail,
   getContentById,
-  addContent
+  addContent,
+  addModule
 } = require("../handlers/handlerModules");
+const auth = require("./auth");
 
 module.exports = [
   // Module list
+  {
+  method: "POST",
+  path: "/modules",
+  handler: addModule,
+  options: {
+    auth: false,
+    payload: {
+      parse: true,
+      allow: "application/json"
+    }
+  }
+},
   {
     method: "GET",
     path: "/modules",
@@ -41,6 +55,7 @@ module.exports = [
     path: "/modules/details",
     handler: createModuleDetail,
     options: {
+      auth: false,
       payload: {
         parse: true,
         allow: "application/json"
