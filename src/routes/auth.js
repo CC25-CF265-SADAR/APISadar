@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { registerHandler, loginHandler, resetPasswordHandler, forgotPasswordHandler } = require("../handlers/handlerUser");
+const { registerHandler, loginHandler, resetPasswordHandler, forgotPasswordHandler, googleAuthHandler } = require("../handlers/handlerUser");
 
 module.exports = [
   {
@@ -55,5 +55,22 @@ module.exports = [
       cors: true,
     },
     handler: resetPasswordHandler,
+  },
+  {
+    method: "POST",
+    path: "/auth/google",
+    options: {
+      auth: false,
+      cors: {
+        origin: ["http://localhost:9001"],
+        credentials: true,
+      },
+      validate: {
+        payload: Joi.object({
+          id_token: Joi.string().required(),
+        }),
+      },
+      handler: googleAuthHandler,
+    },
   },
 ];
