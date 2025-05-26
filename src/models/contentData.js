@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const contentSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   title: String,
-  content: String, 
+  pages: [String],
   videoURL: String,
   nextTopicId: String,
   prevTopicId: String
