@@ -3,6 +3,8 @@ const Hapi = require("@hapi/hapi");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const moduleRoutes = require("./routes/moduleRoutes");
+const progressRoutes = require("./routes/progressRoutes");
+
 
 const validate = async (decoded, request, h) => {
   return { isValid: true };
@@ -38,6 +40,7 @@ const init = async () => {
   // Allow unauthenticated access to auth routes
   server.route(authRoutes.map((route) => ({ ...route, options: { ...route.options, auth: false } })));
   server.route(moduleRoutes);
+  server.route(progressRoutes);
 
   await server.start();
   console.log(`Server running on ${server.info.uri}`);
