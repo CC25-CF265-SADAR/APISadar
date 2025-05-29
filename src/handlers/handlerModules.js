@@ -63,7 +63,7 @@ const getContentById = async (request, h) => {
 };
 
 const addContent = async (request, h) => {
-  const { id, title, type, content, videoURL, nextTopicId, prevTopicId } = request.payload;
+  const { id, title, pages, videoURL, nextTopicId, prevTopicId } = request.payload;
 
   const existing = await Content.findOne({ id });
   if (existing) {
@@ -73,8 +73,7 @@ const addContent = async (request, h) => {
   const newContent = new Content({
     id,
     title,
-    type,
-    content,
+    pages,
     videoURL,
     nextTopicId,
     prevTopicId

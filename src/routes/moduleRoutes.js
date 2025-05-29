@@ -1,4 +1,3 @@
-// routes/moduleRoutes.js
 const {
   getAllModules,
   getModuleDetailById,
@@ -10,47 +9,49 @@ const {
 const auth = require("./auth");
 
 module.exports = [
-  // Module list
   {
-  method: "POST",
-  path: "/modules",
-  handler: addModule,
-  options: {
-    auth: false,
-    payload: {
-      parse: true,
-      allow: "application/json"
+    method: "POST",
+    path: "/modules",
+    handler: addModule,
+    options: {
+      auth: false,
+      payload: {
+        parse: true,
+        allow: "application/json"
+      }
     }
-  }
-},
+  },
   {
     method: "GET",
     path: "/modules",
-    handler: getAllModules
+    handler: getAllModules,
+    options: {
+      auth: false 
+    }
   },
 
   {
-  method: "POST",
-  path: "/content",
-  handler: addContent,
-  options: {
-    auth: false,
-    payload: {
-      parse: true,
-      allow: "application/json"
+    method: "POST",
+    path: "/content",
+    handler: addContent,
+    options: {
+      auth: false,
+      payload: {
+        parse: true,
+        allow: "application/json"
+      }
     }
-  }
-},
+  },
 
-
-  // Module detail by ID
   {
     method: "GET",
     path: "/modules/{id}/details",
-    handler: getModuleDetailById
+    handler: getModuleDetailById,
+    options: {
+      auth: false // disable auth here
+    }
   },
 
-  // Create module detail
   {
     method: "POST",
     path: "/modules/details",
@@ -64,10 +65,12 @@ module.exports = [
     }
   },
 
-  // Get content by ID
   {
     method: "GET",
     path: "/content/{id}",
-    handler: getContentById
+    handler: getContentById,
+    options: {
+      auth: 'jwt'
+      }
   }
 ];
