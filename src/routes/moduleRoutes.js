@@ -34,6 +34,7 @@ module.exports = [
   path: "/content",
   handler: addContent,
   options: {
+    auth: false,
     payload: {
       parse: true,
       allow: "application/json"
