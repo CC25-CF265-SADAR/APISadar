@@ -4,7 +4,9 @@ const {
   createModuleDetail,
   getContentById,
   addContent,
-  addModule
+  addModule,
+  getQuestionsByModuleId,
+  addQuestion,
 } = require("../handlers/handlerModules");
 const auth = require("./auth");
 
@@ -63,6 +65,28 @@ module.exports = [
         allow: "application/json"
       }
     }
+  },
+
+  {
+    method: "GET",
+    path: "/modules/{modId}/questions",
+    handler: getQuestionsByModuleId,
+    options: {
+      auth: 'jwt'
+    }
+  },
+
+  {
+    method: "POST",
+    path: "/modules/{modId}/questions",
+    handler: addQuestion,
+    options: {
+      auth: false, // Sesuaikan dengan pengaturan autentikasi jika diperlukan
+      payload: {
+        parse: true,
+        allow: "application/json",
+      },
+    },
   },
 
   {

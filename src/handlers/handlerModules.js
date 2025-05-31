@@ -1,6 +1,7 @@
 const Module = require("../models/modules");
 const ModuleDetail = require("../models/moduleDetails");
 const Content = require("../models/contentData");
+const ModuleQuestions = require('../models/moduleQuestions');
 
 // ========== MODULE ==========
 const addModule = async (request, h) => {
@@ -82,6 +83,57 @@ const addContent = async (request, h) => {
   return h.response({ message: "Konten berhasil ditambahkan" }).code(201);
 };
 
+const getQuestionsByModuleId = async (request, h) => {
+  const { modId } = request.params; // Ambil ID modul dari URL
+
+  const moduleQuestions = await ModuleQuestions.findOne({ modId });
+  if (!moduleQuestions) {
+    return h.response({ message: "Modul tidak ditemukan atau tidak ada pertanyaan" }).code(404);
+  }
+
+  return h.response(moduleQuestions).code(200);
+};
+
+const addQuestion = async (request, h) => {
+  const { modId, id, type, question, options, answer, multiple } = request.payload;
+
+  // Validasi: Memeriksa apakah modul dengan modId sudah ada
+  const moduleQuestions = await ModuleQuestions.findOne({ modId });
+
+  if (!moduleQuestions) {
+    // Jika modul belum ada, buat modul baru
+    const newModuleQuestions = new ModuleQuestions({
+      modId,
+      questions: [
+        {
+          id,
+          type,
+          question,
+          options,
+          answer,
+          multiple,
+        },
+      ],
+    });
+
+    await newModuleQuestions.save();
+    return h.response({ message: 'Pertanyaan berhasil ditambahkan ke modul baru' }).code(201);
+  } else {
+    // Jika modul sudah ada, tambahkan pertanyaan ke modul yang ada
+    moduleQuestions.questions.push({
+      id,
+      type,
+      question,
+      options,
+      answer,
+      multiple,
+    });
+
+    await moduleQuestions.save();
+    return h.response({ message: 'Pertanyaan berhasil ditambahkan ke modul yang ada' }).code(201);
+  }
+};
+
 module.exports = {
   getAllModules,
   getModuleDetailById,
@@ -89,4 +141,6 @@ module.exports = {
   getContentById, 
   addContent, 
   addModule,
+  getQuestionsByModuleId, 
+  addQuestion,
 };
