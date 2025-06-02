@@ -14,16 +14,20 @@ const saveProgressHandler = async (request, h) => {
 };
 
 const getProgressHandler = async (request, h) => {
-  const { moduleId } = request.params;
-  const userId = request.auth.credentials.id;
+  try {
+    const { moduleId } = request.params;
+    const userId = request.auth.credentials.id;
 
-  const progress = await Progress.findOne({ userId, moduleId });
+    const progress = await Progress.findOne({ userId, moduleId });
 
-  if (!progress) {
-    return h.response({ message: "Progress not found", data: null }).code(200);
+    if (!progress) {
+      progress = await Progress.create({userId, moduleId});
+    }
+
+    return h.response({ data: progress }).code(200);
+  } catch (error){
+    return h.response({message: error.message}).code(500);
   }
-
-  return h.response({ data: progress }).code(200);
 };
 
 module.exports = {
