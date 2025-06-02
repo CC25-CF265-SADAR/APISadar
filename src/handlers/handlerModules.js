@@ -2,6 +2,8 @@ const Module = require("../models/modules");
 const ModuleDetail = require("../models/moduleDetails");
 const Content = require("../models/contentData");
 const ModuleQuestions = require('../models/moduleQuestions');
+const UserAnswers = require('../models/userAnswers');
+const jwt = require('jsonwebtoken');
 
 // ========== MODULE ==========
 const addModule = async (request, h) => {
@@ -134,6 +136,61 @@ const addQuestion = async (request, h) => {
   }
 };
 
+const saveUserAnswers = async (request, h) => {
+  const token = request.headers.authorization.split(' ')[1];  // Ambil token dari header Authorization
+  
+  if (!token) {
+    return h.response({ message: 'Token diperlukan' }).code(400);
+  }
+
+  try {
+    // Verifikasi token dan ambil userId
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;  // Ambil userId dari token yang ter-encode
+
+    const { modId, answers, score, totalQuestions } = request.payload;
+
+    // Simpan jawaban pengguna
+    const newUserAnswers = new UserAnswers({
+      modId,
+      userId,  // Gunakan userId yang didapat dari token
+      answers,
+      score,
+      totalQuestions,
+    });
+
+    await newUserAnswers.save();
+
+    return h.response({ message: 'Jawaban berhasil disimpan' }).code(201);
+  } catch (error) {
+    return h.response({ message: 'Token tidak valid' }).code(401);
+  }
+};
+
+const getResultByUserId = async (request, h) => {
+  const token = request.headers.authorization.split(' ')[1];  // Ambil token dari header Authorization
+  
+  if (!token) {
+    return h.response({ message: 'Token diperlukan' }).code(400);
+  }
+
+  try {
+    // Verifikasi token dan ambil userId
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    // Ambil hasil jawaban berdasarkan userId dan modId
+    const result = await UserAnswers.findOne({ modId: request.params.modId, userId });
+    if (!result) {
+      return h.response({ message: 'Hasil tidak ditemukan' }).code(404);
+    }
+
+    return h.response(result).code(200);
+  } catch (error) {
+    return h.response({ message: 'Token tidak valid' }).code(401);
+  }
+};
+
 module.exports = {
   getAllModules,
   getModuleDetailById,
@@ -143,4 +200,6 @@ module.exports = {
   addModule,
   getQuestionsByModuleId, 
   addQuestion,
+  saveUserAnswers,
+  getResultByUserId
 };

@@ -7,6 +7,8 @@ const {
   addModule,
   getQuestionsByModuleId,
   addQuestion,
+  saveUserAnswers,
+  getResultByUserId
 } = require("../handlers/handlerModules");
 const auth = require("./auth");
 
@@ -87,6 +89,28 @@ module.exports = [
         allow: "application/json",
       },
     },
+  },
+
+  {
+    method: "POST",
+    path: "/modules/{modId}/questions/save",
+    handler: saveUserAnswers,
+    options: {
+      auth: 'jwt',
+      payload: {
+        parse: true,
+        allow: "application/json"
+      }
+    }
+  },
+
+  {
+    method: "GET",
+    path: "/modules/{modId}/results/{userId}",
+    handler: getResultByUserId,
+    options: {
+      auth: 'jwt'
+    }
   },
 
   {
