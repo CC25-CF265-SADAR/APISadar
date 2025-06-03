@@ -1,17 +1,18 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
 
 const userAnswerSchema = new mongoose.Schema({
   modId: { type: String, required: true },
-  userId: { type: String, required: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   answers: [
     {
       questionId: { type: String, required: true },
-      userAnswer: { type: [String], required: true },  // array untuk menyimpan jawaban jika multiple choice
+      userAnswer: { type: [String], required: true },
     },
   ],
-  score: { type: Number, default: 0 },  // nilai akhir setelah kuis selesai
-  totalQuestions: { type: Number, required: true },  // total soal yang dijawab
-  date: { type: Date, default: Date.now },  // tanggal hasil
+  score: { type: Number, default: 0 },
+  totalQuestions: { type: Number, required: true },
+  date: { type: Date, default: Date.now },
 });
 
 module.exports = mongoose.model("UserAnswers", userAnswerSchema);

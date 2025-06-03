@@ -11,6 +11,7 @@ const {
   getResultByUserId
 } = require("../handlers/handlerModules");
 const auth = require("./auth");
+const Joi = require("joi");
 
 module.exports = [
   {
@@ -83,7 +84,7 @@ module.exports = [
     path: "/modules/{modId}/questions",
     handler: addQuestion,
     options: {
-      auth: false, // Sesuaikan dengan pengaturan autentikasi jika diperlukan
+      auth: false, 
       payload: {
         parse: true,
         allow: "application/json",
@@ -92,25 +93,40 @@ module.exports = [
   },
 
   {
-    method: "POST",
-    path: "/modules/{modId}/questions/save",
-    handler: saveUserAnswers,
-    options: {
-      auth: 'jwt',
-      payload: {
-        parse: true,
-        allow: "application/json"
-      }
-    }
+  method: "POST",
+  path: "/modules/{modId}/questions/save",
+  handler: saveUserAnswers,
+  options: {
+    auth: 'jwt',
+    validate: {
+      params: Joi.object({
+        modId: Joi.string().required(),
+      }),
+      payload: Joi.object({
+        answers: Joi.array().items(
+          Joi.object({
+            questionId: Joi.string().required(),
+            userAnswer: Joi.array().items(Joi.string()).required(),
+          })
+        ).required(),
+        score: Joi.number().required(),
+        totalQuestions: Joi.number().required(),
+      }),
+    },
   },
-
+},
   {
     method: "GET",
-    path: "/modules/{modId}/results/{userId}",
+    path: "/modules/{modId}/results",
     handler: getResultByUserId,
     options: {
-      auth: 'jwt'
-    }
+      auth: 'jwt',
+      validate: {
+        params: Joi.object({
+          modId: Joi.string().required(),
+        }),
+      },
+    },
   },
 
   {
