@@ -140,7 +140,7 @@ const saveUserAnswers = async (request, h) => {
   const { answers, score, totalQuestions } = request.payload;
 
   try {
-    const userIdObj = mongoose.Types.ObjectId(userId);
+    const userIdObj = new mongoose.Types.ObjectId(userId);
     
     const newUserAnswers = new UserAnswers({
       modId,
@@ -170,9 +170,9 @@ const getResultByUserId = async (request, h) => {
 
   try {
     const result = await UserAnswers.findOne({ 
-      modId, 
-      userId: mongoose.Types.ObjectId(userId) 
-    }).sort({ date: -1 });
+  modId, 
+  userId: new mongoose.Types.ObjectId(userId) 
+}).sort({ date: -1 });
 
     if (!result) {
       return h.response({ message: 'Hasil tidak ditemukan' }).code(404);
