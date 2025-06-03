@@ -38,29 +38,38 @@ const saveProgressHandler = async (request, h) => {
   const { moduleId, topicsProgress, checkQuiz } = request.payload;
   const userId = request.auth.credentials.id;
 
-  // Cari progress user
   let userProgress = await Progress.findOne({ userId });
 
   if (!userProgress) {
-    // Jika user belum ada, buat progress baru untuk user tersebut
-    userProgress = new Progress({ userId, modulesProgress: [] });
-  }
-
-  // Cari module progress yang sudah ada atau buat yang baru
-  let moduleProgress = userProgress.modulesProgress.find(
-    (module) => module.moduleId === moduleId
-  );
-
-  if (!moduleProgress) {
-    moduleProgress = { moduleId, topicsProgress, checkQuiz };
-    userProgress.modulesProgress.push(moduleProgress); // Tambahkan modul ke array modulesProgress
+    // Hanya simpan modulesProgress dalam progress
+    userProgress = new Progress({
+      userId,
+      modulesProgress: [{
+        moduleId,
+        topicsProgress,
+        checkQuiz,
+      }],
+    });
   } else {
-    // Update progress yang ada
-    moduleProgress.topicsProgress = topicsProgress;
-    moduleProgress.checkQuiz = checkQuiz;
+    // Cek apakah modul sudah ada
+    const existingModuleIndex = userProgress.modulesProgress.findIndex(
+      (module) => module.moduleId === moduleId
+    );
+
+    if (existingModuleIndex !== -1) {
+      // Update module yang sudah ada
+      userProgress.modulesProgress[existingModuleIndex].topicsProgress = topicsProgress;
+      userProgress.modulesProgress[existingModuleIndex].checkQuiz = checkQuiz;
+    } else {
+      // Tambahkan modul baru
+      userProgress.modulesProgress.push({
+        moduleId,
+        topicsProgress,
+        checkQuiz,
+      });
+    }
   }
 
-  // Simpan progress yang sudah diperbarui
   userProgress.updatedAt = new Date();
   await userProgress.save();
 
