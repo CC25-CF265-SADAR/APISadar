@@ -2,6 +2,7 @@ const Joi = require("joi");
 const {
   saveProgressHandler,
   getProgressHandler,
+  updateCheckQuizHandler,
 } = require("../handlers/handlerProgress");
 
 module.exports = [
@@ -21,13 +22,19 @@ module.exports = [
               })
             )
             .required(),
+          checkQuiz: Joi.boolean().required(), // Tambahkan checkQuiz di payload
         }),
       },
     },
   },
   {
     method: "GET",
-    path: "/progress/{moduleId}",
+    path: "/progress",
     handler: getProgressHandler,
+  },
+  {
+    method: "GET",
+    path: "/progress/{userId}/{moduleId}/update-checkquiz",
+    handler: updateCheckQuizHandler, // Tambahkan rute baru untuk update checkQuiz
   },
 ];
