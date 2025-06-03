@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Module = require("../models/modules");
 const ModuleDetail = require("../models/moduleDetails");
 const Content = require("../models/contentData");
