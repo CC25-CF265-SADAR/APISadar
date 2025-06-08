@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const moduleRoutes = require("./routes/moduleRoutes");
 const progressRoutes = require("./routes/progressRoutes");
-
+const leaderboardRoutes = require("./routes/leaderboardRoutes");
 
 const validate = async (decoded, request, h) => {
   return { isValid: true };
@@ -41,6 +41,7 @@ const init = async () => {
   server.route(authRoutes.map((route) => ({ ...route, options: { ...route.options, auth: false } })));
   server.route(moduleRoutes);
   server.route(progressRoutes);
+  server.route(leaderboardRoutes.map((route) => ({ ...route, options: { ...route.options, auth: false } })));
 
   await server.start();
   console.log(`Server running on ${server.info.uri}`);
