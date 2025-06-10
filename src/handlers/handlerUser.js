@@ -103,9 +103,16 @@ const forgotPasswordHandler = async (request, h) => {
               Email: email,
             },
           ],
-          Subject: "Reset Password",
-          TextPart: `Klik link berikut untuk mereset password Anda: ${resetLink}`,
-          HTMLPart: `<p>Klik link berikut untuk mereset password Anda:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
+          Subject: "Tindakan Diperlukan: Reset Kata Sandi Anda",
+          TextPart: `Kami menerima permintaan untuk mereset kata sandi akun Anda. Untuk melanjutkan, silakan klik tautan di bawah ini:\n\n${resetLink}\n\nDemi keamanan, tautan ini hanya berlaku selama 24 jam dan hanya bisa digunakan sekali.\n\nJika Anda tidak meminta reset kata sandi, abaikan email ini—tidak ada perubahan yang akan dilakukan.\n\nButuh bantuan? Tim kami siap membantu kapan saja.\n\nHormat kami,\nSadar: Saring, Amankan, Deteksi, Anti-Rugi`,
+          HTMLPart: `
+            <p>Kami menerima permintaan untuk mereset kata sandi akun Anda. Untuk melanjutkan, silakan klik tombol di bawah ini:</p>
+            <p><a href="${resetLink}" style="display:inline-block;padding:10px 20px;background-color:#42A7C3;color:#ffffff;text-decoration:none;border-radius:5px;">Reset Kata Sandi</a></p>
+            <p>Demi keamanan, tautan ini hanya berlaku selama 24 jam dan hanya bisa digunakan sekali.</p>
+            <p>Jika Anda tidak meminta reset kata sandi, abaikan email ini—tidak ada perubahan yang akan dilakukan.</p>
+            <p>Butuh bantuan? Tim kami siap membantu kapan saja.</p>
+            <p>Hormat kami,<br/><strong>Sadar: Saring, Amankan, Deteksi, Anti-Rugi</strong></p>
+          `,
         },
       ],
     });
