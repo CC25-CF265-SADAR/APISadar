@@ -4,6 +4,9 @@ const User = require("../models/users");
 const SECRET_KEY = process.env.JWT_SECRET;
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const Mailjet = require("node-mailjet");
+
+const mailjet = Mailjet.apiConnect(process.env.MJ_APIKEY_PUBLIC, process.env.MJ_APIKEY_PRIVATE);
 
 const registerHandler = async (request, h) => {
   const { email, password } = request.payload;
@@ -81,16 +84,38 @@ const forgotPasswordHandler = async (request, h) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return h.response({ message: "Email tidak ditemukan" }).code(404);
+    return h.response({ message: "Pastikan email Anda telah terdaftar" }).code(404);
   }
 
   const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: "1h" });
   const resetLink = `${process.env.CLIENT_BASE_URL}/#/reset-password?token=${token}`;
 
-  // Simulasi kirim email (pakai console.log dulu)
-  console.log(`Reset link: ${resetLink}`);
+  try {
+    const requestEmail = await mailjet.post("send", { version: "v3.1" }).request({
+      Messages: [
+        {
+          From: {
+            Email: "no-reply@sadar.site",
+            Name: "Sadar: Saring, Amankan, Deteksi, Anti-Rugi",
+          },
+          To: [
+            {
+              Email: email,
+            },
+          ],
+          Subject: "Reset Password",
+          TextPart: `Klik link berikut untuk mereset password Anda: ${resetLink}`,
+          HTMLPart: `<p>Klik link berikut untuk mereset password Anda:</p><p><a href="${resetLink}">${resetLink}</a></p>`,
+        },
+      ],
+    });
 
-  return h.response({ message: "Link reset dikirim ke email." }).code(200);
+    console.log("email terkirim");
+    return h.response({ message: "Email reset password telah dikirim." }).code(200);
+  } catch (error) {
+    console.error("Error saat mengirim email:", error);
+    return h.response({ message: "Terjadi kesalahan saat mengirim email." }).code(500);
+  }
 };
 
 const resetPasswordHandler = async (request, h) => {
