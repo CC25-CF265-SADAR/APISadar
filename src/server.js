@@ -20,7 +20,7 @@ const init = async () => {
     host: process.env.NODE_ENV !== "production" ? "localhost" : "0.0.0.0",
     routes: {
       cors: {
-        origin: ["*"], // asal frontend kamu
+        origin: ["'https://sadar.site'"], // asal frontend
         credentials: true,
         additionalHeaders: ["Content-Type", "Authorization"],
       },
