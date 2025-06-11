@@ -62,7 +62,7 @@ module.exports = [
     options: {
       auth: false,
       cors: {
-        origin: ["http://localhost:9001"],
+        origin: ["https://sadar.site"],
         credentials: true,
       },
       validate: {
