@@ -327,13 +327,13 @@ Dokumentasi ini mencakup seluruh endpoint yang menyediakan fitur untuk mencatat 
   - Response Body:
   ```shell
    [
-  {
-    "_id": "123",
-    "url": "http://malicious-site.com",
-    "count": 12,
-    "createdAt": "2024-06-01T12:00:00Z"
-  }
-]
+     {
+       "_id": "123",
+       "url": "http://malicious-site.com",
+       "count": 12,
+       "createdAt": "2024-06-01T12:00:00Z"
+     }
+   ]
 - Ambil Top 5 Kata Kunci Spam
   - Method: **GET** 
   - Endpoint: **/leaderboard/spam**
