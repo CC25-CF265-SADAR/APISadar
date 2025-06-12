@@ -20,7 +20,7 @@ const init = async () => {
     host: process.env.NODE_ENV !== "production" ? "localhost" : "0.0.0.0",
     routes: {
       cors: {
-        origin: ["https://sadar.site", "http://localhost:9001"], // asal frontend
+        origin: ["https://sadar.site", "http://localhost:9001", "https://cc25-cf265-sadar.github.io/SadarCapstone-Website/"], // asal frontend
         credentials: true,
         additionalHeaders: ["Content-Type", "Authorization"],
       },
