@@ -351,7 +351,7 @@ Dokumentasi ini mencakup seluruh endpoint yang menyediakan fitur untuk mencatat 
      }
    ]
 
-## User Authentication
+### User Authentication
 Dokumentasi ini mencakup seluruh endpoint yang menyediakan fitur autentikasi pengguna menggunakan login email/password dan login melalui Google OAuth. Fitur pemulihan akun juga disediakan seperti lupa password dan reset password.
 | Method | Endpoint           | Deskripsi                            |
 | ------ | ------------------ | ------------------------------------ |
