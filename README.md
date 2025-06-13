@@ -11,6 +11,7 @@ SADAR (Saring, Amankan, Deteksi, Anti-Rugi) API adalah sistem integrasi yang mem
 - [Project Structure](#project-structure)
 - [Endpoints API](#endpoints-api)
 - [Environment Variables](#environment-variables)
+- [Konfigurasi Deployment](#konfigurasi-deployment)
 
 ## Getting Started
 
@@ -474,3 +475,11 @@ Pastikan variabel berikut diatur di .env:
 - MJ_APIKEY_PRIVATE=your_mailjet_private_key
 - CLIENT_BASE_URL=your_url_website
 - MONGO_URI=your_mongodb_config
+
+## Konfigurasi Deployment 
+- Base URL :
+  ```shell
+  https://api-sadar.onrender.com
+- Platform: Render
+- Bahasa: Node.js / Hapi
+- CORS: Dikonfigurasi agar mengizinkan permintaan dari domain frontend
